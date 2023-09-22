@@ -1,6 +1,6 @@
 package com.example.backend;
 
-import com.example.backend.Entities.NewToDo;
+import com.example.backend.Entities.NewToDoDTO;
 import com.example.backend.Entities.ToDo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,8 +17,12 @@ public class ToDoService {
         return toDoRepository.findAll();
     }
 
-    public ToDo addToDo(NewToDo newToDo) {
-        ToDo toDo = new ToDo(UUID.randomUUID().toString(), newToDo.description(), newToDo.status());
+    public ToDo addToDo(NewToDoDTO newToDoDTO) {
+        ToDo toDo = new ToDo(UUID.randomUUID().toString(), newToDoDTO.description(), newToDoDTO.status());
         return toDoRepository.save(toDo);
+    }
+
+    public ToDo getToDoById(String id) {
+        return toDoRepository.findById(id).orElseThrow();
     }
 }

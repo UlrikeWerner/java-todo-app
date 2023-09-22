@@ -1,6 +1,6 @@
 package com.example.backend;
 
-import com.example.backend.Entities.NewToDo;
+import com.example.backend.Entities.NewToDoDTO;
 import com.example.backend.Entities.ToDo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +19,14 @@ public class ToDoController {
         return toDoService.getToDoList();
     }
 
+    @GetMapping("/{id}")
+    public ToDo getToDoById(@PathVariable String id){
+        return toDoService.getToDoById(id);
+    }
+
     @PostMapping()
-    public ToDo addToDo(@RequestBody NewToDo newToDo){
-        return toDoService.addToDo(newToDo);
+    public ToDo addToDo(@RequestBody NewToDoDTO newToDoDTO){
+        return toDoService.addToDo(newToDoDTO);
     }
 
 }

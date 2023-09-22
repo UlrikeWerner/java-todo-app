@@ -20,13 +20,13 @@ public class ToDoService {
         return toDoRepository.findAll();
     }
 
+    public ToDo getToDoById(String id) throws NoToDoFound {
+        return toDoRepository.findById(id).orElseThrow(NoToDoFound::new);
+    }
+
     public ToDo addToDo(NewToDoDTO newToDoDTO) {
         ToDo toDo = new ToDo(UUID.randomUUID().toString(), newToDoDTO.description(), newToDoDTO.status());
         return toDoRepository.save(toDo);
-    }
-
-    public ToDo getToDoById(String id) throws NoToDoFound {
-        return toDoRepository.findById(id).orElseThrow(NoToDoFound::new);
     }
 
     public ToDo updateToDo(String id, NewToDoDTO updateTodo) throws UpdateFailedToDoNotFound {

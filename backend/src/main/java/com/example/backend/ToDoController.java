@@ -28,14 +28,14 @@ public class ToDoController {
         return toDoService.getToDoById(id);
     }
 
-    @PutMapping("/{id}")
-    public ToDo putToDo(@PathVariable String id, @RequestBody NewToDoDTO todo) throws UpdateFailedToDoNotFound {
-        return toDoService.updateToDo(id, todo);
-    }
-
     @PostMapping()
     public ToDo addToDo(@RequestBody NewToDoDTO newToDoDTO){
         return toDoService.addToDo(newToDoDTO);
+    }
+
+    @PutMapping("/{id}")
+    public ToDo putToDo(@PathVariable String id, @RequestBody NewToDoDTO todo) throws UpdateFailedToDoNotFound {
+        return toDoService.updateToDo(id, todo);
     }
 
     @DeleteMapping("/{id}")
@@ -45,7 +45,7 @@ public class ToDoController {
 
     @ExceptionHandler(NoToDoFound.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleNoSuchElementException(NoToDoFound e){
+    public String handleNoToDoFound(NoToDoFound e){
         return "Das passende ToDo konnte nicht gefunden werden!";
     }
 

@@ -24,6 +24,18 @@ public class ToDoIntegrationTest {
 
     @Test
     @DirtiesContext
+    void testGetAllToDo_ReturnEmptyList() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/todo"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        []
+                        """
+                ));
+    }
+
+    @Test
+    @DirtiesContext
     void testGetAllToDo() throws Exception {
         toDoRepository.save(new ToDo("1", "description for DONE", Status.DONE));
         toDoRepository.save(new ToDo("2", "test", Status.OPEN));
@@ -63,5 +75,15 @@ public class ToDoIntegrationTest {
                        }
                         """
                 ));
+    }
+
+    @Test
+    @DirtiesContext
+    void testGetToDoById_ReturnException() throws Exception {
+        String id = "1";
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/todo/" + id))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Das passende ToDo konnte nicht gefunden werden!"));
     }
 }

@@ -1,5 +1,8 @@
 package com.example.backend;
 
+import com.example.backend.Entities.Exception.NoToDoForDelete;
+import com.example.backend.Entities.Exception.NoToDoFound;
+import com.example.backend.Entities.Exception.UpdateFailedToDoNotFound;
 import com.example.backend.Entities.NewToDoDTO;
 import com.example.backend.Entities.ToDo;
 import lombok.RequiredArgsConstructor;
@@ -22,16 +25,27 @@ public class ToDoService {
         return toDoRepository.save(toDo);
     }
 
-    public ToDo getToDoById(String id) {
-        return toDoRepository.findById(id).orElseThrow();
+    public ToDo getToDoById(String id) throws NoToDoFound {
+        return toDoRepository.findById(id).orElseThrow(NoToDoFound::new);
     }
 
-    public void deleteToDoBy(String id) {
+    public ToDo updateToDo(String id, NewToDoDTO updateTodo) throws UpdateFailedToDoNotFound {
+        try{
+            ToDo testToDo = getToDoById(id);
+            ToDo toDoToSave = new ToDo(id, updateTodo.description(), updateTodo.status());
+            return toDoRepository.save(toDoToSave);
+        } catch (NoToDoFound e){
+            throw new UpdateFailedToDoNotFound();
+        }
+    }
+
+    public void deleteToDoBy(String id) throws NoToDoForDelete {
+        try{
+            ToDo testToDo = getToDoById(id);
             toDoRepository.deleteById(id);
-    }
+        } catch (NoToDoFound e){
+            throw new NoToDoForDelete();
+        }
 
-    public ToDo updateToDo(String id, NewToDoDTO updateTodo) {
-        ToDo toDoToSave = new ToDo(id, updateTodo.description(), updateTodo.status());
-        return toDoRepository.save(toDoToSave);
     }
 }
